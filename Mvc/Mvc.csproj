@@ -6,7 +6,24 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Views\Account\AccessDenied.cshtml" />
+  </ItemGroup>
+
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Views\Account\AccessDenied.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Views\Account\AccessDenied.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Views\Account\AccessDenied.cshtml" />
 	</ItemGroup>
 </Project>

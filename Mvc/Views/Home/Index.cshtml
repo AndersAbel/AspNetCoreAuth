@@ -1,14 +1,19 @@
-﻿<div>
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+@inject IAuthenticationSchemeProvider SchemeProvider
+
+<div>
     <h1 class="display-4">Asp.Net Core Authentication and Authorization</h1>
-    @if(User.Identity!.IsAuthenticated)
+    @if (User.Identity!.IsAuthenticated)
     {
         <p>Welcome @User.Identity.Name</p>
-        @if(User.IsInRole("admin"))
+        @if (User.IsInRole("admin"))
         {
             <p>You are logged in as an admin</p>
         }
-        <form asp-action="Logout" asp-controller="Account">
-            <button class="btn btn-secondary">Logout</button>
+
+        <form asp-action="Logout" asp-controller="Account" method="post">
+            <button class="btn btn-outline-secondary">Logout</button>
         </form>
     }
     else
@@ -17,4 +22,40 @@
     }
 
     <p>More details are found on our <a asp-action="Secure">secure</a> page.</p>
+
+    <h2>Authentication APIs</h2>
+    <p>Try out authentication APIs for all registered schemes.</p>
+    <div class="row">
+        @{
+            var schemes = await SchemeProvider.GetAllSchemesAsync();
+        }
+        @if (schemes.Any())
+        {
+            @foreach (var scheme in schemes)
+            {
+                <div class="col">
+                    <h3>@(scheme.DisplayName ?? scheme.Name)</h3>
+                    <div>
+                        <a asp-action="Challenge" asp-controller="Account" asp-route-scheme="@scheme.Name">Challenge</a>
+                    </div>
+                    <div>
+                        <form asp-action="SignOut" asp-controller="Account">
+                            <input name="scheme" type="hidden" value="@scheme.Name" />
+                            <button class="btn btn-link p-0">SignOut</button>
+                        </form>
+                    </div>
+                    <div>
+                        <a asp-action="Forbid" asp-controller="Account" asp-route-scheme="@scheme.Name">Forbid</a>
+                    </div>
+                    <div>
+                        <a asp-action="Authenticate" asp-controller="Account" asp-route-scheme="@scheme.Name">Authenticate</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>There are no registered authentication schemes</p>
+        }
+    </div>
 </div>

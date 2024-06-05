@@ -1,0 +1,38 @@
+﻿@model Microsoft.AspNetCore.Authentication.AuthenticateResult
+
+<h1>AuthenticateResult</h1>
+@if (Model.Succeeded)
+{
+    <p>Authentication Succeeded</p>
+
+    <h2>Claims</h2>
+    <dl>
+        @foreach(var c in Model.Principal.Claims)
+        {
+            <dt>@c.Type</dt>
+            <dd>@c.Value</dd>
+        }
+    </dl>
+
+    <h2>Properties</h2>
+    <dl>
+        @foreach(var p in Model.Properties.Items)
+        {
+            <dt>@p.Key</dt>
+            <dd>@p.Value</dd>
+        }
+    </dl>
+
+}
+else
+{
+    if (Model.None)
+    {
+        <p>No authentication result returned.</p>
+    }
+
+    if (Model.Failure != null)
+    {
+        <p>Authentication failed: @Model.Failure.Message</p>
+    }
+}
