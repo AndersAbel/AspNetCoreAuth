@@ -34,21 +34,27 @@
             @foreach (var scheme in schemes)
             {
                 <div class="col">
-                    <h3>@(scheme.DisplayName ?? scheme.Name)</h3>
-                    <div>
-                        <a asp-action="Challenge" asp-controller="Account" asp-route-scheme="@scheme.Name">Challenge</a>
-                    </div>
-                    <div>
-                        <form asp-action="SignOut" asp-controller="Account">
-                            <input name="scheme" type="hidden" value="@scheme.Name" />
-                            <button class="btn btn-link p-0">SignOut</button>
-                        </form>
-                    </div>
-                    <div>
-                        <a asp-action="Forbid" asp-controller="Account" asp-route-scheme="@scheme.Name">Forbid</a>
-                    </div>
-                    <div>
-                        <a asp-action="Authenticate" asp-controller="Account" asp-route-scheme="@scheme.Name">Authenticate</a>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>@(scheme.DisplayName ?? scheme.Name)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <a asp-action="Challenge" asp-controller="Account" asp-route-scheme="@scheme.Name">Challenge</a>
+                            </div>
+                            <div>
+                                <form asp-action="SignOut" asp-controller="Account">
+                                    <input name="scheme" type="hidden" value="@scheme.Name" />
+                                    <button class="btn btn-link p-0">SignOut</button>
+                                </form>
+                            </div>
+                            <div>
+                                <a asp-action="Forbid" asp-controller="Account" asp-route-scheme="@scheme.Name">Forbid</a>
+                            </div>
+                            <div>
+                                <a asp-action="Authenticate" asp-controller="Account" asp-route-scheme="@scheme.Name">Authenticate</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
