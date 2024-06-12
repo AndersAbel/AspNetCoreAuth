@@ -1,44 +1,41 @@
+using Microsoft.AspNetCore.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication()
+    .AddJwtBearer(opt =>
+    {
+        opt.Authority = "https://demo.duendesoftware.com";
+        opt.TokenValidationParameters.ValidateAudience = false;
+
+        opt.MapInboundClaims = false;
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapGet("/challenge", async ctx =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    await ctx.ChallengeAsync();
+});
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+app.MapGet("/authenticate", async ctx =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var result = await ctx.AuthenticateAsync();
 
-app.MapGet("/weatherforecast", () =>
+    if (result.Succeeded)
+    {
+        await ctx.Response.WriteAsJsonAsync(
+            result.Principal.Claims.Select(c => new { c.Type, c.Value }));
+    }
+    else
+    {
+        await ctx.Response.WriteAsync("Authenticate failed");
+    }
+});
+
+app.MapGet("/forbid", async ctx =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    await ctx.ForbidAsync();
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

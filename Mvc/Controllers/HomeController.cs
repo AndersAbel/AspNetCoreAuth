@@ -19,7 +19,7 @@ public class HomeController : Controller
         return View();
     }
 
-    [Authorize]
+    [Authorize("TopSecret")]
     public IActionResult Secure()
     {
         return View();

@@ -5,7 +5,7 @@ using Mvc.Models;
 using System.Security.Claims;
 
 namespace Mvc.Controllers;
-public class AccountController(IAuthenticationSchemeProvider schemeProvider) : Controller
+public class AccountController() : Controller
 {
     [HttpGet]
     public IActionResult Login()

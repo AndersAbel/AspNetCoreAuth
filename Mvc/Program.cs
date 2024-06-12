@@ -1,11 +1,19 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.DataProtection;
+using Mvc;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
+
+builder.Services.AddDataProtection()
+    .SetApplicationName("NDC")
+    .PersistKeysToFileSystem(new("c:\\temp\\dpkeys"))
+    .ProtectKeysWithCertificate(Helpers.Thumbprint);
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -15,20 +23,17 @@ builder.Services.AddAuthentication(opt =>
     .AddCookie()
     .AddOpenIdConnect(opt =>
     {
-        opt.Authority = "https://demo.duendesoftware.com";
-        opt.ClientId = "interactive.confidential";
-        opt.ClientSecret = "secret";
-        opt.ResponseType = "code";
-
-        opt.SaveTokens = true;
-
-        opt.MapInboundClaims = false;
-        opt.GetClaimsFromUserInfoEndpoint = true;
-
-        opt.TokenValidationParameters.NameClaimType = "name";
-        opt.TokenValidationParameters.RoleClaimType = "role";
-
+        opt.ConfigureIdentityServer();
     });
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("TopSecret", p =>
+    {
+        p.RequireAssertion(ctx =>
+            ctx.User.FindFirstValue("name")!.StartsWith("A"));
+    });
+});
 
 var app = builder.Build();
 
