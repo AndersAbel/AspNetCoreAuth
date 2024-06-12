@@ -33,10 +33,7 @@ public class AccountController() : Controller
                     claims.Add(new("role", "admin"));
                 }
 
-                var identity = new ClaimsIdentity(claims, "pwd", "name", "role");
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(principal);
+                // TODO: Actually login
 
                 return LocalRedirect(model.ReturnUrl ?? "/");
             }

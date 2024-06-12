@@ -10,35 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
 
-builder.Services.AddDataProtection()
-    .SetApplicationName("NDC")
-    .PersistKeysToFileSystem(new("c:\\temp\\dpkeys"))
-    .ProtectKeysWithCertificate(Helpers.Thumbprint);
-
-builder.Services.AddAuthentication(opt =>
-{
-    opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-})
-    .AddCookie()
-    .AddOpenIdConnect(opt =>
-    {
-        // There's some configuration parameters needed to connect to
-        // Duende Software's demo IdentityServer instance. That's not
-        // the main focus of the talk where I use this demo, so I've
-        // hidden those in a separate method.
-        opt.ConfigureIdentityServer();
-    });
-
-builder.Services.AddAuthorization(opt =>
-{
-    opt.AddPolicy("TopSecret", p =>
-    {
-        p.RequireAuthenticatedUser();
-        p.RequireAssertion(ctx =>
-            (ctx.User.FindFirstValue("name") ?? "").StartsWith("A"));
-    });
-});
 
 var app = builder.Build();
 
