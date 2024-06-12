@@ -2,15 +2,6 @@ using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer(opt =>
-    {
-        opt.Authority = "https://demo.duendesoftware.com";
-        opt.TokenValidationParameters.ValidateAudience = false;
-
-        opt.MapInboundClaims = false;
-    });
-
 var app = builder.Build();
 
 app.MapGet("/challenge", async ctx =>
