@@ -9,14 +9,16 @@ public class CallApi : Controller
 
     public async Task<IActionResult> Index(string method)
     {
-        var token = await HttpContext.GetTokenAsync("access_token");
-
-        if (!string.IsNullOrEmpty(token))
+        if (User.Identity!.IsAuthenticated)
         {
-            httpClient.DefaultRequestHeaders.Authorization =
-                new("Bearer", token);
-        }
+            var token = await HttpContext.GetTokenAsync("access_token");
 
+            if (!string.IsNullOrEmpty(token))
+            {
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new("Bearer", token);
+            }
+        }
         var url = $"https://localhost:5005/{method}";
 
         var result = await httpClient.GetAsync(url);
