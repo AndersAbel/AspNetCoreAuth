@@ -23,6 +23,10 @@ builder.Services.AddAuthentication(opt =>
     .AddCookie()
     .AddOpenIdConnect(opt =>
     {
+        // There's some configuration parameters needed to connect to
+        // Duende Software's demo IdentityServer instance. That's not
+        // the main focus of the talk where I use this demo, so I've
+        // hidden those in a separate method.
         opt.ConfigureIdentityServer();
     });
 
