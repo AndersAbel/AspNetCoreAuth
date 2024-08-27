@@ -36,7 +36,7 @@ builder.Services.AddAuthorization(opt =>
     {
         p.RequireAuthenticatedUser();
         p.RequireAssertion(ctx =>
-            ctx.User.FindFirstValue("name")!.StartsWith("A"));
+            (ctx.User.FindFirstValue("name") ?? "").StartsWith("A"));
     });
 });
 
