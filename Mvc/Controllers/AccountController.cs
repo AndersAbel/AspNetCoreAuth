@@ -23,6 +23,7 @@ public class AccountController() : Controller
             {
                 List<Claim> claims =
                     [
+                        new("sub", "123"),
                         new("name", model.UserName),
                         new("email", model.UserName + "@example.com")
                     ];
