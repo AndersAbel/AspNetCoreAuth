@@ -5,6 +5,7 @@ using Mvc.Models;
 using System.Security.Claims;
 
 namespace Mvc.Controllers;
+
 public class AccountController() : Controller
 {
     [HttpGet]

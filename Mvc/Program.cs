@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddDataProtection()
     .SetApplicationName("NDC")
     .PersistKeysToFileSystem(new("c:\\temp\\dpkeys"))
-    .ProtectKeysWithCertificate(Helpers.Thumbprint);
+    .ProtectKeysWithCertificate(Helpers.DPCertificate);
 
 builder.Services.AddAuthentication(opt =>
 {
