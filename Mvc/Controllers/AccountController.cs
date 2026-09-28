@@ -102,7 +102,7 @@ public class AccountController() : Controller
 
         if (authResult.Succeeded)
         {
-            if(authResult.Properties.Items.TryGetValue(".AuthScheme", out var schemeName))
+            if (authResult.Properties.Items.TryGetValue(".AuthScheme", out var schemeName))
             {
                 AuthenticationProperties props = new()
                 {
